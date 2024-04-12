@@ -100,12 +100,12 @@ TextureImporter:
       name: levels_0
       rect:
         serializedVersion: 2
-        x: 96
-        y: 460
-        width: 414
-        height: 388
+        x: 124
+        y: 479
+        width: 376
+        height: 347
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -121,12 +121,12 @@ TextureImporter:
       name: levels_1
       rect:
         serializedVersion: 2
-        x: 520
-        y: 456
-        width: 391
-        height: 417
+        x: 528
+        y: 479
+        width: 376
+        height: 347
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -142,10 +142,10 @@ TextureImporter:
       name: levels_2
       rect:
         serializedVersion: 2
-        x: 93
-        y: 105
-        width: 420
-        height: 362
+        x: 124
+        y: 119
+        width: 376
+        height: 347
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
