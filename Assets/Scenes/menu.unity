@@ -203,6 +203,7 @@ GameObject:
   - component: {fileID: 401847882}
   - component: {fileID: 401847881}
   - component: {fileID: 401847880}
+  - component: {fileID: 401847883}
   m_Layer: 5
   m_Name: level1
   m_TagString: Untagged
@@ -272,7 +273,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 401847881}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 401847883}
+        m_TargetAssemblyTypeName: SceneLevel1, Assembly-CSharp
+        m_MethodName: transition
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &401847881
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -311,6 +324,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 401847878}
   m_CullTransparentMesh: 1
+--- !u!114 &401847883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 401847878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1eb01418a0bec84dbd3c91a04ec3ad7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
