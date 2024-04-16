@@ -7,6 +7,6 @@ public class DeathScreenScript : MonoBehaviour
 {
     public void ReStart()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        SceneManager.LoadScene(1);
     }
 }

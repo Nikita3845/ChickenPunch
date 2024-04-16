@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class ControlPlayer : MonoBehaviour
 {
-
+    public Animator animator;
     public float speed = 1;
     public float jumpForce = 3;
     Rigidbody2D rb;
     SpriteRenderer sr;
+
+
 
 
     // Start is called before the first frame update
@@ -24,7 +26,9 @@ public class ControlPlayer : MonoBehaviour
         float movement = Input.GetAxis("Horizontal");
         transform.position += new Vector3(movement, 0, 0) * speed * Time.deltaTime;
 
-        if (Input.GetKeyDown(KeyCode.Space) && Mathf.Abs(rb.velocity.y) < 0.5f)
+        animator.SetFloat("HorizontalMove", Mathf.Abs(movement));
+
+        if (Input.GetKeyDown(KeyCode.Space) && Mathf.Abs(rb.velocity.y) < 0.05f)
             rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
 
         sr.flipX = movement < 0 ? true : false;
