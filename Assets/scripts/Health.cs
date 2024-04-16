@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Healths : MonoBehaviour
@@ -11,18 +12,21 @@ public class Healths : MonoBehaviour
     public int maxHealth;
 
     public GameObject PanelDeath;
+    public Animator animator;
 
 
     //Функция получения урона
     public void TakeHit(int damage)
     {
+
         health -= damage;
 
         //Если здоровье меньше 0 - уничтожить объект на котором весит этот скрипт
         if (health < 0)
         {
             Destroy(gameObject);
-            PanelDeath.SetActive(true);
+            //PanelDeath.SetActive(true);
+            SceneManager.LoadScene(1);
         }
 
     }
