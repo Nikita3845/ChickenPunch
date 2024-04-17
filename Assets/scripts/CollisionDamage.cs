@@ -15,7 +15,7 @@ public class CollisionDamage : MonoBehaviour
             //Берём у этого объекта компонент Health (Скрипт который на нём висит)
             Healths heal = coll.gameObject.GetComponent<Healths>();
             //И вызываем функцию получения урона, в агрументе переменная урона
-            heal.TakeHit(collisionDamage);
+            heal.TakeDamage(collisionDamage);
         }
     }
 }

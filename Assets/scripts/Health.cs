@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Healths : MonoBehaviour
 {
+    public UnityEvent DeathPlayer = new();
+
     //Значение здоровья
     public int health;
     //Максимальное значение здоровья
@@ -16,17 +19,16 @@ public class Healths : MonoBehaviour
 
 
     //Функция получения урона
-    public void TakeHit(int damage)
+    public void TakeDamage(int damage)
     {
 
         health -= damage;
 
         //Если здоровье меньше 0 - уничтожить объект на котором весит этот скрипт
-        if (health < 0)
+        if (health <= 0)
         {
+            DeathPlayer?.Invoke();
             Destroy(gameObject);
-            //PanelDeath.SetActive(true);
-            SceneManager.LoadScene(1);
         }
 
     }
