@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ControlPlayer : MonoBehaviour
@@ -7,6 +8,8 @@ public class ControlPlayer : MonoBehaviour
     public float speed = 1;
     public float jumpForce = 3;
     public float damage = 1;
+
+    public Joystick Joystick;
 
     private Rigidbody2D rb;
     private SpriteRenderer sr;
@@ -25,19 +28,23 @@ public class ControlPlayer : MonoBehaviour
 
     void Update()
     {
-        float movement = Input.GetAxis("Horizontal");
+
+
+        float movement = Joystick.Horizontal;
 
         SetRunAnimation(movement);
         SetSpriteFlip(movement);
         OnMove(movement);
 
-        if (Input.GetKeyDown(KeyCode.Space) && Mathf.Abs(rb.velocity.y) < 0.5f)
-            OnJump();
+        //if (Input.GetKeyDown(KeyCode.Space) && Mathf.Abs(rb.velocity.y) < 0.5f)
+            //OnJump();
 
         if (Input.GetMouseButtonDown(0) && _isAttacking == false)
             SetAttackAnimation();
 
+
     }
+
 
     private void SetAttackAnimation()
     {
@@ -45,6 +52,11 @@ public class ControlPlayer : MonoBehaviour
             animator.SetTrigger(Attack1Animation);
         else
             animator.SetTrigger(Attack2Animation);
+    }
+
+    public void JumpBtn()
+    {
+        OnJump();
     }
 
     private void OnJump()
