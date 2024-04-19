@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class ControlPlayer : MonoBehaviour
@@ -31,7 +28,7 @@ public class ControlPlayer : MonoBehaviour
         float movement = _joystick.Horizontal;
 
 #if UNITY_EDITOR
-        movement = Input.GetAxisRaw("Horizontal");
+        //movement = Input.GetAxisRaw("Horizontal");
 #endif
 
 
@@ -42,15 +39,19 @@ public class ControlPlayer : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && Mathf.Abs(_rb.velocity.y) < 0.1f)
             OnJump();
 
-        if (Input.GetMouseButtonDown(0) && _isAttacking == false)
-            SetAttackAnimation();
-
+#if UNITY_EDITOR
+        //if (Input.GetMouseButtonDown(0))
+        //    SetAttackAnimation();
+#endif
 
     }
 
 
-    private void SetAttackAnimation()
+    public void SetAttackAnimation()
     {
+        if (_isAttacking == true)
+            return;
+
         if (Random.value > 0.5f)
             _animator.SetTrigger(Attack1Animation);
         else
@@ -64,7 +65,8 @@ public class ControlPlayer : MonoBehaviour
 
     private void OnJump()
     {
-        _rb.AddForce(Vector2.up * _jumpForce, ForceMode2D.Impulse);
+        if(Mathf.Abs(_rb.velocity.y) < 0.1f)
+            _rb.AddForce(Vector2.up * _jumpForce, ForceMode2D.Impulse);
     }
 
     private void OnMove(float movement)
