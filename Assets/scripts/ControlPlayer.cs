@@ -6,7 +6,8 @@ public class ControlPlayer : MonoBehaviour
 {
     public float speed = 1;
     public float jumpForce = 3;
-    public float damage = 1;
+    public int damage = 1;
+    public float attackDistance = 1.5f;
 
     private Rigidbody2D rb;
     private SpriteRenderer sr;
@@ -31,7 +32,7 @@ public class ControlPlayer : MonoBehaviour
         SetSpriteFlip(movement);
         OnMove(movement);
 
-        if (Input.GetKeyDown(KeyCode.Space) && Mathf.Abs(rb.velocity.y) < 0.5f)
+        if (Input.GetKeyDown(KeyCode.Space) && Mathf.Abs(rb.velocity.y) < 0.1f)
             OnJump();
 
         if (Input.GetMouseButtonDown(0) && _isAttacking == false)
@@ -91,14 +92,13 @@ public class ControlPlayer : MonoBehaviour
 
         Vector2 attackDirection = sr.flipX == false ? Vector2.right : Vector2.left;
 
-        RaycastHit2D[] hits = Physics2D.RaycastAll(attackPosition, attackDirection);
+        RaycastHit2D[] hits = Physics2D.RaycastAll(attackPosition, attackDirection, attackDistance);
 
         foreach (var hit in hits)
         {
             if (hit.collider.tag == "Enemy" && hit.collider.TryGetComponent(out IDamagable damagable))
             {
-                damagable.TakeDamange(damage);
-                print(hit.collider.name);
+                damagable.TakeDamage(damage);
             }
         }
 

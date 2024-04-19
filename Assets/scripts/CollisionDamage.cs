@@ -1,21 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CollisionDamage : MonoBehaviour
 {
-    public int collisionDamage = 10;
-    public string collisionTag;
+    [SerializeField] private int _collisionDamage = 10;
 
     private void OnCollisionEnter2D(Collision2D coll)
     {
         //Если тег объекта коллайдер которого столкнулся с коллайдером нашего объекта - Player
-        if (coll.gameObject.tag == collisionTag)
+        if (coll.gameObject.tag == "Player" && coll.gameObject.TryGetComponent(out IDamagable damagable))
         {
-            //Берём у этого объекта компонент Health (Скрипт который на нём висит)
-            Healths heal = coll.gameObject.GetComponent<Healths>();
-            //И вызываем функцию получения урона, в агрументе переменная урона
-            heal.TakeDamage(collisionDamage);
+            damagable.TakeDamage(_collisionDamage);
         }
     }
 }

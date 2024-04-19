@@ -1,11 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class Healths : MonoBehaviour
+public class Healths : MonoBehaviour, IDamagable
 {
     public UnityEvent DeathPlayer = new();
 
@@ -14,15 +11,11 @@ public class Healths : MonoBehaviour
     //Максимальное значение здоровья
     public int maxHealth;
 
-    public GameObject PanelDeath;
-    public Animator animator;
-
 
     //Функция получения урона
-    public void TakeDamage(int damage)
+    public void TakeDamage(int value)
     {
-
-        health -= damage;
+        health -= value;
 
         //Если здоровье меньше 0 - уничтожить объект на котором весит этот скрипт
         if (health <= 0)
@@ -30,7 +23,6 @@ public class Healths : MonoBehaviour
             DeathPlayer?.Invoke();
             Destroy(gameObject);
         }
-
     }
 
     //Функция прибавления здоровья
@@ -84,4 +76,6 @@ public class Healths : MonoBehaviour
             }
         }
     }
+
+
 }

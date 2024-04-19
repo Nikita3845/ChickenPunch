@@ -1,4 +1,4 @@
 ﻿internal interface IDamagable
 {
-    void TakeDamange(float value);
+    void TakeDamage(int value);
 }

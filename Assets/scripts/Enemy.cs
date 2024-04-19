@@ -1,9 +1,6 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Tilemaps;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public class Enemy : MonoBehaviour
 {
@@ -12,187 +9,147 @@ public class Enemy : MonoBehaviour
         Chill, Angry, Patrol
     }
 
-    public float argRange;
-    public float patrolDistance;
+    [SerializeField] private float _speed;
+    [SerializeField] private float _argRange;
+    [SerializeField] private float _patrolDistance;
+    [SerializeField] private State _state;
 
-    private Rigidbody2D rb;
-    private SpriteRenderer sr;
-    [SerializeField] private State state;
+    private Rigidbody2D _rb;
+    private SpriteRenderer _sr;
+    private Animator _animator;
 
-    private Vector2 startPositionPatroling;
-    private Vector2 endPositionPatroling;
-    private Vector2 currentPositionPatroling;
+    private Vector2 _startPositionPatroling;
+    private Vector2 _endPositionPatroling;
 
-    private Vector2 target;
+    private Transform _player;
+    private Coroutine _patrolCoroutine;
 
-
-    public float speed;
-
-    public int positionOfPatrol;
-    public Transform point;
+    private const string RunAnimation = "Run";
 
 
-
-    bool moveRight;
-
-    Transform player;
-    public float stop;
-
-
-    bool chill = false;
-    bool angry = false;
-    bool back = false;
-
-    // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        sr = GetComponent<SpriteRenderer>();
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        _rb = GetComponent<Rigidbody2D>();
+        _sr = GetComponent<SpriteRenderer>();
+        _animator = GetComponent<Animator>();
 
-        startPositionPatroling = transform.position;
-        endPositionPatroling = transform.position + Vector3.right * patrolDistance;
-        currentPositionPatroling = endPositionPatroling;
-        StartCoroutine(Patroling());
+        _player = GameObject.FindGameObjectWithTag("Player").transform;
+
+        _startPositionPatroling = transform.position;
+        _endPositionPatroling = transform.position + Vector3.right * _patrolDistance;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        float distanceToPlayer = GetDistanceToPlayer();
-        
-
-
-        if (distanceToPlayer > argRange)
-            state = State.Patrol;
-        else
-            state = State.Angry;
-
-        //if (Vector2.Distance(transform.position, point.position) < positionOfPatrol && angry == false) 
-        //{
-        //    chill = true;
-        //}
-        //if(Vector2.Distance(transform.position, player.position) < stop) 
-        //{
-        //    angry = true;
-        //    chill = false;
-        //    back = false;
-        //}
-        //if (Vector2.Distance(transform.position, player.position) > stop)
-        //{
-        //    back = true;
-        //    angry = false;
-        //}
-
-
-        //if(chill == true)
-        //{
-        //    Chill();
-        //}
-        //else if(angry == true)
-        //{
-        //    Angry();
-        //}
-        //else if (back == true)
-        //{
-        //    Back();
-        //}
-        //SetSpriteFlip(MathF.Sign(rb.velocity.x));
-
-
+        SwitchState();
+        StateHandler();
+        SetRunAnimation();
+        SetSpriteFlip(_rb.velocity.x);
     }
-    private void ChangeTarget()
+
+    private void SwitchState()
     {
-        currentPositionPatroling = currentPositionPatroling == startPositionPatroling ? startPositionPatroling : endPositionPatroling;
+        float distanceToPlayer = GetDistanceToPlayer();
+
+        if (distanceToPlayer > _argRange)
+            _state = State.Patrol;
+        else
+            _state = State.Angry;
     }
 
+    private void StateHandler()
+    {
+        switch (_state)
+        {
+            case State.Patrol:
+                StartPatroling();
+                break;
+            case State.Angry:
+                StopPatroling();
+                MoveTo(_player.position);
+                break;
+        }
+    }
 
     private float GetDistanceToPlayer()
     {
-        return Vector2.Distance(transform.position, player.position);
-    }
-
-    void Chill()
-    {
-        if (transform.position.x > point.position.x + positionOfPatrol) 
-        {
-            moveRight = true;
-        }
-        else if(transform.position.x < point.position.x - positionOfPatrol)
-        {
-            moveRight = false;
-        }
-
-        if (moveRight)
-        {
-            transform.position = new Vector2(transform.position.x + speed * Time.deltaTime, transform.position.y);
-        }
-        else
-        {
-            transform.position = new Vector2(transform.position.x - speed * Time.deltaTime, transform.position.y);
-        }
-    }
-
-    void Angry()
-    {
-        transform.position = Vector2.MoveTowards(transform.position, player.position, speed * Time.deltaTime);
-    }
-
-    void Back()
-    {
-        transform.position = Vector2.MoveTowards(transform.position, point.position, speed * Time.deltaTime);
+        return Vector2.Distance(transform.position, _player.position);
     }
 
     private IEnumerator Patroling()
     {
         while (true)
         {
-            float direction = Mathf.Sign(endPositionPatroling.x - transform.position.x);
-            SetSpriteFlip(direction);
-            while (Vector2.Distance(transform.position, endPositionPatroling) > 0.1f)
+            if (_state != State.Patrol)
             {
-                MoveTo(endPositionPatroling);
                 yield return null;
+                continue;
             }
 
-            yield return new WaitForSeconds(1);
-
-            direction = Mathf.Sign(startPositionPatroling.x - transform.position.x);
-            SetSpriteFlip(MathF.Sign(direction));
-            while (Vector2.Distance(transform.position, startPositionPatroling) > 0.1f)
+            yield return new WaitForSeconds(2);
+            while (Mathf.Abs(transform.position.x - _endPositionPatroling.x) >= 0.1)
             {
-                MoveTo(startPositionPatroling);
+                MoveTo(_endPositionPatroling);
                 yield return null;
             }
+            StopMove();
 
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(2);
+            while (Mathf.Abs(transform.position.x - _startPositionPatroling.x) >= 0.1)
+            {
+                MoveTo(_startPositionPatroling);
+                yield return null;
+            }
+            StopMove();
         }
     }
 
-    public float DirectionX;
-    private void MoveTo(float direction)
+    private void StartPatroling()
     {
-        DirectionX = direction;
-        rb.velocity = new Vector2(direction * speed, rb.velocity.y);
+        if (_patrolCoroutine == null)
+        {
+            _rb.bodyType = RigidbodyType2D.Kinematic;
+            _patrolCoroutine = StartCoroutine(Patroling());
+        }
+    }
+
+    private void StopPatroling()
+    {
+        if (_patrolCoroutine != null)
+        {
+            StopCoroutine(_patrolCoroutine);
+            _patrolCoroutine = null;
+            _rb.bodyType = RigidbodyType2D.Dynamic;
+        }
+    }
+
+    private void SetRunAnimation()
+    {
+        if (Mathf.Abs(Mathf.Ceil(_rb.velocity.x)) != 0)
+            _animator.SetBool(RunAnimation, true);
+        else
+            _animator.SetBool(RunAnimation, false);
     }
 
     private void MoveTo(Vector2 target)
     {
-        Vector2 direction = ((Vector3)target - transform.position).normalized;
-        rb.MovePosition((Vector2)transform.position + direction * speed * Time.fixedDeltaTime);
+        float direction = Math.Sign(target.x - transform.position.x);
+
+        Vector2 moveVelocity = new Vector2(direction * _speed, _rb.velocity.y);
+        _rb.velocity = moveVelocity;
     }
 
     private void StopMove()
     {
-        rb.velocity = Vector2.zero;
+        _rb.velocity = Vector2.zero;
     }
 
     private void SetSpriteFlip(float direction)
     {
         if (direction < 0)
-            sr.flipX = false;
+            _sr.flipX = false;
         else if (direction > 0)
-            sr.flipX = true;
+            _sr.flipX = true;
     }
 
     private void OnDrawGizmos()
@@ -200,8 +157,10 @@ public class Enemy : MonoBehaviour
         float sphereRadius = 0.2f;
 
         Gizmos.color = Color.green;
-        Gizmos.DrawSphere(startPositionPatroling, sphereRadius);
-        Gizmos.DrawSphere(endPositionPatroling, sphereRadius);
-        Gizmos.DrawLine(startPositionPatroling, endPositionPatroling);
+        Gizmos.DrawSphere(_startPositionPatroling, sphereRadius);
+        Gizmos.DrawSphere(_endPositionPatroling, sphereRadius);
+        Gizmos.DrawLine(_startPositionPatroling, _endPositionPatroling);
     }
+
+
 }

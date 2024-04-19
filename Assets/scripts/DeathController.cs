@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class DeathController : MonoBehaviour
@@ -14,15 +11,17 @@ public class DeathController : MonoBehaviour
         _deathPanel.SetActive(false);   
         _health = FindObjectOfType<Healths>();
         _health.DeathPlayer.AddListener(ShowScreen);
+        Time.timeScale = 1;
     }
 
     private void ShowScreen()
     {
+        Time.timeScale = 0;
         _deathPanel.SetActive(true);
     }
 
     public void ReStart()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
