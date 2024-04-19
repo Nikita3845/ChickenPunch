@@ -16,7 +16,6 @@ public class Healths : MonoBehaviour
 
     public GameObject PanelDeath;
     public Animator animator;
-    private const string DamagePlayer = "damage_player";
 
     public void Start()
     {
@@ -29,7 +28,6 @@ public class Healths : MonoBehaviour
     {
 
         health -= damage;
-        animator.SetTrigger(DamagePlayer);
 
         //Если здоровье меньше 0 - уничтожить объект на котором весит этот скрипт
         if (health <= 0)
