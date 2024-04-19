@@ -9,7 +9,8 @@ public class CameraController : MonoBehaviour
 
     void Start()
     {
-
+        if (_player == null)
+            _player = GameObject.FindWithTag("Player");
     }
 
     void LateUpdate()

@@ -10,11 +10,12 @@ public class Healths : MonoBehaviour, IDamagable
     public int health;
     //������������ �������� ��������
     public int maxHealth;
+    private Animator _animator;
 
 
     public void Start()
     {
-         animator = GetComponent<Animator>();
+         _animator = GetComponent<Animator>();
     }
 
 

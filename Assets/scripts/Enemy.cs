@@ -73,7 +73,10 @@ public class Enemy : MonoBehaviour
 
     private float GetDistanceToPlayer()
     {
-        return Vector2.Distance(transform.position, _player.position);
+        if (_player != null)
+            return Vector2.Distance(transform.position, _player.position);
+        else
+            return float.MaxValue;
     }
 
     private IEnumerator Patroling()

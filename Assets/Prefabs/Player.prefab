@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 7720718403538100584}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -157,9 +157,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f4f810427104114abc2bafa340bb9d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
-  jumpForce: 5
-  damage: 1
+  _speed: 5
+  _jumpForce: 5
+  _damage: 1
+  _attackDistance: 1.5
+  _joystick: {fileID: 0}
 --- !u!50 &2433484143189571358
 Rigidbody2D:
   serializedVersion: 4
@@ -183,7 +185,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
@@ -199,10 +201,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3252b56ba364dfc4bb01c113459201b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DeathPlayer:
+    m_PersistentCalls:
+      m_Calls: []
   health: 3
   maxHealth: 3
-  PanelDeath: {fileID: 0}
-  animator: {fileID: 0}
   health_player: 3
   numberOfLives: 3
   lives:
